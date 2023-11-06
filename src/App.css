@@ -1,0 +1,133 @@
+*{
+  font-family: "Trebuchet MS";
+}
+
+body{
+  margin: 0;
+  padding: 0;
+}
+
+.home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.webcam{
+  position: relative;
+}
+
+video{
+  border-radius: 20px;
+}
+
+.detect-button, .prev-button, .next-button{
+  position: absolute;
+  font-size: 20px;
+  background-color: white;
+  padding: 10px;
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer !important;
+  z-index: 1000;
+}
+
+.detect-button{
+  right: 30px;
+  bottom: 30px;
+}
+
+.prev-button{
+  left: 30px;
+  bottom: 30px;
+}
+
+.next-button{
+  left: 150px;
+  bottom: 30px;
+}
+
+.detect-button:hover, .prev-button:hover, .next-button:hover{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.input-gesture, .detected-gesture{
+  top: 0;
+  left: 0;
+  position: absolute;
+  /* height: 250px;
+  width: 175px; */
+  border: 2px solid rgb(162, 162, 162);
+  background-color: rgba(255, 255, 255,0.8);
+  box-shadow: 0 0 10px rgb(255, 255, 255,0.5);
+  margin: 10px;
+  border-radius: 10px;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.input-gesture img{
+  height: 200px;
+  width: 200px;
+  margin-right: 20px;
+}
+
+.input-gesture div:nth-child(1),.detected-gesture div:nth-child(1){
+  margin: 10px;
+}
+
+.detected-gesture{
+  left: unset;
+  right: 0;
+}
+
+.detected-gesture img{
+  height: 100px;
+  width: 100px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.handpose-toggle{
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: block;
+}
+
+.handpose-toggle div{
+  display: inline-block;
+  font-weight: bold;
+}
+
+.handpose-toggle div:nth-child(2),.handpose-toggle div:nth-child(3){
+  border: 2px solid rgb(255, 255, 255,0.5);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.handpose-toggle div:nth-child(2):hover,.handpose-toggle div:nth-child(3):hover{
+  border: 2px solid rgb(255, 255, 255);
+  background-color: white;
+}
+
+.completed{
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  font-weight: bold;
+  font-size: 30px;
+  border: 2px solid rgb(162, 162, 162);
+  background-color: rgba(255, 255, 255,0.6);
+  padding: 10px;
+  border-radius: 10px;
+}
