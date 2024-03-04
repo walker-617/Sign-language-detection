@@ -2,7 +2,7 @@
 
 ## OVERVIEW
 
-This project is a web application that detects American Sign Language (ASL) gestures using TensorFlow.js. The application is built with React for the frontend, Node.js for the backend, and TensorFlow.js for real-time sign language detection.
+This project is a web application that detects American Sign Language (ASL) gestures using TensorFlow.js. The application is built with React for the front end, and TensorFlow.js for real-time sign language detection.
 
 ## PREREQUISITES
 Before running the application, make sure you have the following installed:
@@ -21,16 +21,16 @@ Navigate to the project directory
 ```bash
 cd Sign-language-detection
 ```
-Install dependecies
+Install dependencies
 ```bash
 npm install
 ```
 
 ## USAGE
-Start the react app
+Start the React app
 ```bash
 npm start
 ```
-This will launch react application in your browser at http://localhost:3000
+This will launch the react application in your browser at http://localhost:3000
 
 ### Application is live at https://asl-detection.netlify.app
