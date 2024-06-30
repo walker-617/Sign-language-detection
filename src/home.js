@@ -13,13 +13,14 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [curr, setCurr] = useState("A");
   const [detected, setDetected] = useState("");
-  const [completed, setCompleted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   useEffect(() => {
     const setupHandpose = async () => {
       const net = await handpose.load();
+      setLoading(false);
       const intervalId = setInterval(() => {
         detect(net);
       }, 150);
@@ -31,9 +32,6 @@ export default function Home() {
 
   useEffect(() => {
     setCurr(ABC[count]);
-    if (count === 26) {
-      setCompleted(true);
-    }
   }, [count]);
 
   useEffect(() => {
@@ -52,14 +50,14 @@ export default function Home() {
     webcamRef.current.video.height = videoHeight;
 
     // Set canvas height and width
-      canvasRef.current.width = videoWidth;
-      canvasRef.current.height = videoHeight;
+    canvasRef.current.width = videoWidth;
+    canvasRef.current.height = videoHeight;
     const hands = await net.estimateHands(video);
 
     if (hands.length > 0) {
       const ctx = canvasRef.current.getContext("2d");
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        drawHand(hands[0], ctx);
+      drawHand(hands[0], ctx);
 
       const GE = new fp.GestureEstimator([
         Handsigns.aSign,
@@ -92,11 +90,15 @@ export default function Home() {
 
       const estimatedGestures = await GE.estimate(hands[0].landmarks, 5.0);
       const signScores = estimatedGestures.gestures;
-      signScores.sort((a, b) => b.score - a.score); // Sort in descending order
+      signScores.sort((a, b) => b.score - a.score);
 
       if (signScores.length) {
         setDetected(signScores[0].name);
+      } else {
+        setDetected("");
       }
+    } else {
+      setDetected("");
     }
   }
 
@@ -119,7 +121,8 @@ export default function Home() {
               zIndex: "99",
             }}
           ></canvas>
-          {!completed ? (
+          {loading ? <div className="loading">Loading...</div> : null}
+          {!loading ? (
             <div>
               {count < 25 ? (
                 <div
@@ -151,39 +154,49 @@ export default function Home() {
               </div>
               <div className="detected-gesture" id="detected-gesture">
                 <div>Detected gesture</div>
-                <img src={SignImage[detected]} />
+                {detected ? (
+                  <img src={SignImage[detected]} />
+                ) : (
+                  <div className="none">
+                    None
+                  </div>
+                )}
               </div>
               <div className="handpose-toggle">
                 <div>Handpose</div>
                 <div
-                  // onClick={() => {
-                  //   setShowPose(true);
-                  // }}
+                // onClick={() => {
+                //   setShowPose(true);
+                // }}
                 >
                   On
                 </div>
                 <div
-                  // onClick={() => {
-                  //   setShowPose(false);
-                  // }}
+                // onClick={() => {
+                //   setShowPose(false);
+                // }}
                 >
                   Off
                 </div>
               </div>
+              <div
+                className="reset-button"
+                onClick={() => {
+                  setCount(0);
+                  setDetected("");
+                }}
+              >
+                Reset
+              </div>
             </div>
           ) : (
-            <div className="completed">Completed</div>
+            ""
           )}
-          <div
-            className="detect-button"
-            onClick={() => {
-              setCount(0);
-              setCompleted(false);
-            }}
-          >
-            Reset
-          </div>
         </div>
+      </div>
+      <div className="warning">
+        <div className="warn">This application is best viewed on a desktop or in full-screen mode.</div>
+        <div className="ps">*Tried responsive, it didn't go well.</div>
       </div>
     </>
   );
