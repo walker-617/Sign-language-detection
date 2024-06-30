@@ -14,10 +14,12 @@ export default function Home() {
   const [curr, setCurr] = useState("A");
   const [detected, setDetected] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showPose, setShowPose] = useState(true);
 
   const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   useEffect(() => {
+    sessionStorage.setItem("showPose", "yes");
     const setupHandpose = async () => {
       const net = await handpose.load();
       setLoading(false);
@@ -55,9 +57,12 @@ export default function Home() {
     const hands = await net.estimateHands(video);
 
     if (hands.length > 0) {
-      const ctx = canvasRef.current.getContext("2d");
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      drawHand(hands[0], ctx);
+      let x = sessionStorage.getItem("showPose");
+      if (x==="yes") {
+        const ctx = canvasRef.current.getContext("2d");
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        drawHand(hands[0], ctx);
+      }
 
       const GE = new fp.GestureEstimator([
         Handsigns.aSign,
@@ -157,24 +162,26 @@ export default function Home() {
                 {detected ? (
                   <img src={SignImage[detected]} />
                 ) : (
-                  <div className="none">
-                    None
-                  </div>
+                  <div className="none">None</div>
                 )}
               </div>
               <div className="handpose-toggle">
                 <div>Handpose</div>
                 <div
-                // onClick={() => {
-                //   setShowPose(true);
-                // }}
+                  className={showPose ? "active" : ""}
+                  onClick={() => {
+                    setShowPose(true);
+                    sessionStorage.setItem("showPose", "yes");
+                  }}
                 >
                   On
                 </div>
                 <div
-                // onClick={() => {
-                //   setShowPose(false);
-                // }}
+                  className={!showPose ? "active" : ""}
+                  onClick={() => {
+                    setShowPose(false);
+                    sessionStorage.setItem("showPose", "no");
+                  }}
                 >
                   Off
                 </div>
@@ -195,7 +202,9 @@ export default function Home() {
         </div>
       </div>
       <div className="warning">
-        <div className="warn">This application is best viewed on a desktop or in full-screen mode.</div>
+        <div className="warn">
+          This application is best viewed on a desktop or in full-screen mode.
+        </div>
         <div className="ps">*Tried responsive, it didn't go well.</div>
       </div>
     </>
